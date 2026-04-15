@@ -1,2 +1,4 @@
-# air-pollution-africa
-Meauring and monitoring air quality in Kumasi, Ghana
+# Air Pollution Africa
+Meauring and monitoring air quality in Kumasi, Ghana | KNMI
+
+
