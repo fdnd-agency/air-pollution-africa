@@ -1,0 +1,45 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="icon" type="image/x-icon" href="/img/favicon.png">
+<link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>
+<script>
+	document.addEventListener("DOMContentLoaded", () => {
+	const menu = document.querySelector(".header-menu");
+	if (!menu) return;
+
+	const btn = menu.querySelector(".header-button");
+	const dropdown = menu.querySelector(".header-dropdown");
+	if (!btn || !dropdown) return;
+
+	const setOpen = (open) => {
+			menu.classList.toggle("is-open", open);
+			btn.setAttribute("aria-expanded", open ? "true" : "false");
+	};
+
+	btn.addEventListener("click", (e) => {
+			e.preventDefault();
+			e.stopPropagation();
+			setOpen(!menu.classList.contains("is-open"));
+	});
+
+	document.addEventListener("click", (e) => {
+			if (!menu.classList.contains("is-open")) return;
+			if (menu.contains(e.target)) return;
+			setOpen(false);
+	});
+
+	document.addEventListener("keydown", (e) => {
+			if (e.key !== "Escape") return;
+			if (!menu.classList.contains("is-open")) return;
+			setOpen(false);
+			btn.focus();
+	});
+	
+	dropdown.addEventListener("click", (e) => {
+			const link = e.target.closest("a");
+			if (!link) return;
+			setOpen(false);
+	});
+	});
+</script>

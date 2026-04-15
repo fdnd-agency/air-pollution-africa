@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head'); %>
+  <title>Home</title>
+
+  <link rel="stylesheet" href="/leafletcss/leaflet.css" />
+  <script src="/leafletjs/leaflet.js"></script>
+  <link rel="stylesheet" href="/css/index.css">
+  <link rel="stylesheet" href="/css/map.css">
+  <link rel="stylesheet" href="/css/table.css">
+</head>
+
+<body class="page-home">
+  <header class="site-header">
+    <%- include('../partials/header'); %>
+  </header>
+
+  <main class="home-layout">
+    <section id="controls">
+      <span style="display: flex;color: black; justify-content: space-between;">
+        <h2><%= (keuzes && keuzes['Gekozen stad']) ? keuzes['Gekozen stad'] : 'Kumasi' %> Air Quality</h2>
+        <a href="/info" class="info-btn" aria-label="Info this project">i</a>
+      </span>
+      <div class="view-toggle" data-view-toggle>
+        <button id="MapButton" class="viewSwitch active" type="button">Map</button>
+        <button id="TableButton" class="viewSwitch" type="button">Table</button>
+      </div>
+    </section>
+    <section id="view">
+      <div id="mapView">
+        <%- include('../partials/map'); %>
+      </div>
+      <div id="tableView">
+        <%- include('../partials/table'); %>
+      </div>
+    </section>
+  </main>
+
+  <script id="boot-data" type="application/json">
+    <%- JSON.stringify({ keuzes: keuzes || [], points: initialPoints || [] }) %>
+  </script>
+
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+
+  <script src="/js/index.js" defer></script>
+
+  <% if (process.env.VERCEL) { %>
+    <script>
+      window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/speed-insights/script.js"></script>
+
+    <script>
+      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
+  <% } %>
+</body>
+</html>

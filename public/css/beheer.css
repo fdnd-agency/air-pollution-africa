@@ -1,0 +1,495 @@
+main {
+    height: 82%;
+    align-items: center;
+    padding: 10px;
+    color: var(--DEF-Blue-Tekst);
+    width: 100vw;
+    max-width: 750px;
+    margin: auto;
+}
+
+main > section {
+    width: auto;
+    padding: 10px;
+    margin: 20px 0px;
+    border: solid 1px var(--DEF-Border);
+    border-radius: 10px;
+}
+
+main section article {
+    display: flex;
+    gap: 12px;
+}
+
+main section article a {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 18px;
+    border: solid 1px var(--DEF-Border);
+    border-radius: 999px;
+    color: var(--color-text);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+#dateControl {
+  display: grid;
+  grid-template-columns: 49% 49%;
+  grid-template-rows: repeat(2, auto);
+  grid-column-gap: 2%;
+  grid-row-gap: 0px;
+}
+
+#batchInput {
+  max-height: 70vh;
+  overflow-y: scroll;
+}
+
+.saveBatch {
+  border: solid 1px var(--DEF-Border);
+  border-radius: 10px;
+  background-color: var(--DEF-Blue-Styling);
+  color: var(--color-bg);
+  padding: 6px 10px;
+  margin: 5px 0px;
+  width: -webkit-fill-available;
+}
+
+.clean {
+  border: none;
+}
+
+#batchInput article {
+    border: solid 1px var(--DEF-Border);
+    border-radius: 10px;
+    padding: 5px;
+    display: grid;
+    grid-template-columns: 49% 49%;
+    grid-template-rows: repeat(4, auto);
+    grid-column-gap: 2%;
+    grid-row-gap: 5px;
+    margin-bottom: 10px;
+}
+
+#batchInput article h3 {
+    grid-area: 1 / 1 / 2 / 3;
+}
+
+#batchInput article .batchNoMeasurement {
+    grid-area: 4 / 1 / 5 / 3;
+}
+
+#measurementPoints article {
+    border: solid 1px var(--DEF-Border);
+    border-radius: 10px;
+    padding: 5px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(6, auto);
+    grid-column-gap: 15px;
+    grid-row-gap: 5px;
+    margin-bottom: 10px;
+}
+
+#measurementPoints div {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+}
+
+#measurementPoints div input, button {
+  border: solid 1px var(--DEF-Border);
+  border-radius: 10px;
+  background-color: var(--DEF-Border);
+  color: var(--color-bg);
+  padding: 6px 10px;
+  margin: 5px 0px;
+}
+
+#measurementPoints div input {
+  background-color: var(--DEF-Background);
+  color: var(--DEF-Blue-Tekst);
+}
+
+#measurementPoints article h3 {
+    grid-area: 1 / 1 / 2 / 4;
+}
+
+#measurementPoints article span { 
+    grid-area: 1 / 4 / 2 / 5; 
+    text-align: end;
+    padding: 6px 1px;
+}
+
+.div3 { 
+  grid-area: 2 / 1 / 3 / 3; 
+}
+
+.div4 { 
+  grid-area: 2 / 3 / 3 / 5; 
+}
+
+.div5 { 
+  grid-area: 3 / 1 / 4 / 2; 
+}
+
+.div6 { 
+  grid-area: 3 / 2 / 4 / 3; 
+}
+
+.div7 { 
+  grid-area: 3 / 3 / 4 / 5; 
+}
+
+.div8 { 
+  grid-area: 4 / 1 / 5 / 3; 
+}
+
+.div9 { 
+  grid-area: 4 / 3 / 5 / 5; 
+}
+
+.div10 { 
+  grid-area: 5 / 1 / 6 / 3; 
+}
+
+.div11 { 
+  grid-area: 5 / 3 / 6 / 5; 
+}
+
+.div12 { 
+    grid-area: 6 / 1 / 7 / 3;
+    place-self: center; 
+}
+
+.div13 { 
+    grid-area: 6 / 3 / 7 / 5;
+    place-self: center; 
+}
+
+#batchpoints {
+    max-height: 70vh;
+    overflow-y: scroll;
+}
+
+#adminEmails article {
+    border: solid 1px var(--DEF-Border);
+    border-radius: 10px;
+    padding: 5px;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: repeat(2, auto);
+    grid-row-gap: 5px;
+    margin-bottom: 10px;
+}
+
+#adminEmails form {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#adminEmails form input, button {
+  border: solid 1px var(--DEF-Border);
+  border-radius: 10px;
+  background-color: var(--DEF-Blue-Styling);
+  color: var(--DEF-Background);
+  padding: 6px 10px;
+  margin: 5px 0px;
+}
+
+#adminEmails form input {
+  background-color: var(--DEF-Background);
+  color: var(--DEF-Blue-Tekst);
+}
+
+#adminEmails article p:first-of-type { 
+  grid-area: 1 / 1 / 2 / 2; 
+}
+
+#adminEmails article p:last-of-type { 
+  grid-area: 2 / 1 / 3 / 2; 
+}
+
+#adminEmails article form { 
+    grid-area: 1 / 2 / 3 / 3; 
+    justify-self: center;
+    align-content: center;
+}
+
+input, select {
+  border: solid 1px var(--DEF-Border);
+  padding: 2px;
+}
+
+.statsGrid {
+  display: grid;
+  gap: 12px;
+}
+
+.stat {
+  background: var(--DEF-Background);
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+
+.statLabel {
+  display: block;
+  font-size: 0.75rem;
+  opacity: 0.7;
+  margin-bottom: 4px;
+}
+
+.statValue {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.statRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.statRow > div {
+  flex: 1;
+}
+
+:is(#editPointModal, #newPointModal) {
+  position: fixed;
+  inset: 0;
+  background: var(--DEF-Backdrop);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+:is(#editPointModal, #newPointModal).hidden {
+    display: none;
+}
+
+:is(#editPointModal, #newPointModal) .popup {
+    background: var(--DEF-White);
+    width: min(720px, 100%);
+    max-height: 90vh;
+    border-radius: 16px;
+    box-shadow: var(--DEF-shadow-soft);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    margin: 20px;
+}
+
+:is(#editPointModal, #newPointModal) .popupHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--DEF-Border);
+}
+
+:is(#editPointModal, #newPointModal) .popupHeader h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--DEF-Blue-Tekst);
+}
+
+:is(#editPointModal, #newPointModal) .closeBtn {
+  border: none;
+  background-color: var(--DEF-Background);;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0.6;
+}
+:is(#editPointModal, #newPointModal) .closeBtn:hover {
+  opacity: 1;
+}
+
+:is(#editPointModal, #newPointModal) .popupBody {
+  padding: 16px 18px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+:is(#editPointModal, #newPointModal) .field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+:is(#editPointModal, #newPointModal) .field span {
+  font-size: 12px;
+  font-weight: 600;
+  color: #444;
+}
+
+:is(#editPointModal, #newPointModal) input[type="text"],
+:is(#editPointModal, #newPointModal) input[type="number"],
+:is(#editPointModal, #newPointModal) input[type="date"],
+:is(#editPointModal, #newPointModal) textarea {
+  border: 1px solid var(--DEF-Border);
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 13px;
+  font-family: inherit;
+  min-width: 125px;
+}
+
+:is(#editPointModal, #newPointModal) textarea {
+  resize: vertical;
+}
+
+:is(#editPointModal, #newPointModal) .fieldRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+#measurementRows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.measurementRow {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr auto;
+  gap: 6px;
+  align-items: center;
+}
+
+.measurementRow input {
+  width: 100%;
+}
+
+.measurementRow .removeRow {
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  cursor: pointer;
+  opacity: 0.6;
+}
+.measurementRow .removeRow:hover {
+  opacity: 1;
+}
+
+:is(#editPointModal, #newPointModal) .actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+:is(#editPointModal, #newPointModal) .btnSecondary,
+:is(#editPointModal, #newPointModal) .btnPrimary {
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  cursor: pointer;
+  border: 1px solid var(--DEF-Border);
+  background: var(--DEF-Background);;
+}
+
+:is(#editPointModal, #newPointModal) .btnPrimary {
+  font-weight: 700;
+  border-color: #111;
+  background-color: var(--DEF-Background);
+}
+
+:is(#editPointModal, #newPointModal) .btnSecondary:hover,
+:is(#editPointModal, #newPointModal) .btnPrimary:hover {
+  background: var(--DEF-Background);
+}
+
+.noMeasToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--DEF-Grey-Tekst);
+}
+
+.noMeasToggle input {
+  width: 18px;
+  height: 18px;
+}
+
+@media (max-width: 770px) {
+  :is(#editPointModal, #newPointModal) {
+    padding: 0;
+  }
+
+  :is(#editPointModal, #newPointModal) .popup {
+    border-radius: 0;
+    height: 100vh;
+    width: 100vw;
+    margin: 20px;
+  }
+
+  :is(#editPointModal, #newPointModal) .popupHeader {
+    padding: 12px 14px;
+  }
+
+  :is(#editPointModal, #newPointModal) .popupBody {
+    padding: 14px;
+    gap: 12px;
+  }
+  
+  :is(#editPointModal, #newPointModal) input[type="text"],
+  :is(#editPointModal, #newPointModal) input[type="number"],
+  :is(#editPointModal, #newPointModal) input[type="date"],
+  :is(#editPointModal, #newPointModal) textarea {
+    font-size: 16px;
+    padding: 12px 12px;
+  }
+  
+  :is(#editPointModal, #newPointModal) .fieldRow {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .measurementRow {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 10px;
+    border: 1px solid var(--DEF-Border);
+    border-radius: 12px;
+    background: var(--DEF-White);
+  }
+  
+  .measurementRow .removeRow {
+    justify-self: end;
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: 1px solid var(--DEF-Border);
+    background: var(--DEF-White);
+    opacity: 0.9;
+  }
+  
+  :is(#editPointModal, #newPointModal) .actions {
+    gap: 10px;
+  }
+
+  :is(#editPointModal, #newPointModal) .btnSecondary,
+  :is(#editPointModal, #newPointModal) .btnPrimary {
+    flex: 1;
+    width: 100%;
+  }
+}
+
+.bold {
+    font-weight: bold;
+}
+.hidden { 
+    display: none !important; 
+}

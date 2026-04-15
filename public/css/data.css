@@ -1,0 +1,95 @@
+main {
+  height: 82%;
+  align-items: center;
+  padding: 10px;
+  color: var(--DEF-Blue-Tekst);
+  max-width: 750px;
+  margin: auto;
+}
+p {
+  margin-bottom: 10px;
+}
+main section {
+  padding: 10px;
+  margin: 10px 0px;
+  border: solid 1px var(--DEF-Border);
+  border-radius: 10px;
+}
+main section article {
+  display: flex;
+  gap: 12px;
+}
+main section article a {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 18px;
+  border: solid 1px var(--DEF-Border);
+  border-radius: 999px;
+  color: var(--DEF-Blue-Tekst);
+  text-decoration: none;
+  font-weight: bold;
+}
+.downloadRow a {
+  display: block;
+  margin-bottom: 10px;
+  width: 100%;
+  padding: 10px 18px;
+  border: solid 1px var(--DEF-Border);
+  border-radius: 10px;
+  color: var(--DEF-Blue-Tekst);
+  text-decoration: none;
+  font-weight: bold;
+}
+.downloadRow :first-child {
+  background-color: var(--DEF-Blue-Styling);
+  color: var(--DEF-White);
+}
+main section article :last-child {
+  background-color: var(--DEF-Blue-Styling);
+  color: var(--DEF-White);
+}
+
+.codeBlock {
+  background-color: var(--DEF-Background);
+  padding: 3px 5px;
+  border-radius: 10px;
+  border: solid 1px grey;
+  color: var(--DEF-Blue-Tekst);
+}
+
+.copyCode {
+  background-color: var(--DEF-Code-Copy);
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: solid 1px var(--DEF-Border);
+  color: var(--DEF-White);
+  line-break: anywhere;
+}
+
+.accordion summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.accordion summary::marker {
+  content: "";
+}
+
+.accordion summary::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform 0.2s ease;
+  margin-left: 8px;
+}
+
+.accordion[open] summary::after {
+  transform: rotate(-135deg);
+}
