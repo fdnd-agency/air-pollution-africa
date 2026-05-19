@@ -1,12 +1,32 @@
-# Node dingen
-/node_modules
-package-lock.json
+node_modules
 
-# Bestand voor onze secrets
-.env    
+# Output
+.output
+.vercel
+.netlify
+.wrangler
+/.svelte-kit
+/build
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.*
+!.env.example
+!.env.test
+
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+# Playwright
+test-results
+
+# Node dingen
+package-lock.json
 
 # Voor als er een backup is gemaakt doe ik steeds als zip
 *.zip
-
-# Voor de hosting via vercel
-.vercel
