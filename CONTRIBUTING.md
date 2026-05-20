@@ -72,3 +72,43 @@ For conventions that developers work with more frequently, we provided clearer e
 - Make user-friendly and accessible designs.
 - Work together in design systems and validate designs in both Figma and the browser.
 - Use variables, styles en organize your Figma-files effectively.
+
+## Definitions of Ready
+
+A Definition of Ready (DoR) is a set of criteria that a user story must meet before the team can start working on it in a sprint.
+It ensures that the story is clear, feasible, and valuable, so the team doesn’t waste time figuring things out mid-sprint.
+
+### Definitions of Ready - checklist
+
+- User story written clearly with format "As a.... I want to.... So that...." and approved by Product Owner.
+- Know the scope. Know what you will be working on in this user-story so you'l lalso know what NOT to work on.
+- Acceptance criteria defined (what “done” looks like).
+- Sources or research material available. 
+- Give a weight/value to the user story. Use poker planning with the Modified Fibonacchi set of values.
+- Story estimated and added to sprint backlog.
+
+## Definitions of Done
+
+A Definition of Done (DoD) is a shared checklist of criteria that a product increment must meet before it is considered complete, releasable, and ready for customers.
+
+### Definitions of Done - checklist
+When you create a pull request, perform the following tests and checks to ensure your code meets the FDND code conventions and works in all situations. Fix any merge conflicts before requesting a review, and make sure your own code won’t break the dev branch.
+
+Testing
+- HTML validator
+- Browser testing (Browserstack)
+- Lighthouse Performance test
+- Device testing
+- User testing
+- Responsiveness checks
+- Lighthouse Accessibility test
+- Manual Accessibility testing ([a11y checklist](https://www.a11yproject.com/checklist/))
+
+Code
+- FDND conventions are followed, Check for [coventions](https://docs.fdnd.nl/conventies.html) relevent to your code
+- Remove commented-out code
+  - We should be able to read and understand your code without detailed explanations, those belong in the /docs
+- Prevent repeated code (DRY principle)
+
+> These checks are meant for all situations, it is posible to skip 1 or more of the checks.  
+please provide valid reasons oth the reviewers might asks you to perform them or ask why the test is missing
