@@ -23,8 +23,6 @@
 - Feedback will be given in sprintreviews.
 - Communicate clearly with the client to avoid miscommunications.
 
-## Teamcanvas
-
 ## Workflow
 
 - We work by using issues and feature branches.
@@ -66,6 +64,14 @@ We follow the code conventions of FDND agency. Below the most important conventi
 For conventions that developers work with more frequently, we provided clearer explanations along with code examples, ensuring that everyone on the team follows the same approach and coding style.
 
 ### Code conventions with examples
+- [Atomic design conventions](https://github.com/fdnd-agency/air-pollution-africa/blob/dev/docs/conventions/atomic-design-conventions.md)
+- [Conventional commits](https://github.com/fdnd-agency/air-pollution-africa/blob/dev/docs/conventions/coventional-commits.md)
+- [CSS conventions](https://github.com/fdnd-agency/air-pollution-africa/blob/dev/docs/conventions/css-conventions.md)
+- [HTMl conventions](https://github.com/fdnd-agency/air-pollution-africa/blob/dev/docs/conventions/html-conventions.md)
+- [Javascript conventions](https://github.com/fdnd-agency/air-pollution-africa/blob/dev/docs/conventions/javascript-conventions.md)
+- [Naming conventions](https://github.com/fdnd-agency/air-pollution-africa/blob/dev/docs/conventions/naming-conventions.md)
+- [Pull request conventions](https://github.com/fdnd-agency/air-pollution-africa/blob/dev/docs/conventions/pull-request-conventions.md)
+- [Sveltekit conventions](https://github.com/fdnd-agency/air-pollution-africa/blob/dev/docs/conventions/sveltekit-conventions.md)
 
 ### Design conventions
 
