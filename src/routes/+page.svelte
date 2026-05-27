@@ -11,6 +11,27 @@
     </section>
 </main>
 
+<section id="tableControl" class="tableControl">
+  <select id="tableMonth" class="tcSelect" aria-label="Select month"></select>
+
+  <select id="tableSort" class="tcSelect" aria-label="Select sort">
+    <option value="no2_desc">Sort: highest NO₂</option>
+    <option value="no2_asc">Sort: lowest NO₂</option>
+    <option value="name_asc">Sort: a → z</option>
+    <option value="name_desc">Sort: z → a</option>
+  </select>
+
+  <input id="tableSearch" class="tcSearch" type="search" placeholder="Search location..." aria-label="Search location">
+</section>
+
+<section id="tableList" class="tableList"></section>
+
+<div class="scale-control-table">
+  <button class="scaleWHO is-active" type="button" data-preset="WHO">WHO</button>
+  <button class="scaleEU" type="button" data-preset="EU">EU</button>
+  <button class="scaleRelative" type="button" data-preset="RELATIVE" title="">Relative</button>
+</div>
+
 <style>
 .view-toggle {
   display: inline-flex;
