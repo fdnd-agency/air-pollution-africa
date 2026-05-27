@@ -90,6 +90,44 @@ body {
   align-items: center;
 }
 
+.header-dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  min-width: 160px;
+  padding: 6px;
+  background: var(--DEF-White);
+  border: 1px solid var(--DEF-Border);
+  border-radius: 12px;
+  box-shadow: var(--DEF-shadow-soft);
+  opacity: 0;
+  transform: translateY(-4px);
+  pointer-events: none;
+  transition: opacity 0.12s ease, transform 0.12s ease;
+  z-index: 9999;
+}
+
+.header-menu.is-open .header-dropdown {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.header-dropdown a {
+  display: block;
+  padding: 10px 10px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--DEF-Black);
+  font-size: 14px;
+}
+
+.header-dropdown a:hover,
+.header-dropdown a:focus {
+  background: #eef2f6;
+  outline: none;
+}
+
 main {
   background-color: var(--DEF-White);
   flex: 1;
