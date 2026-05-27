@@ -10,10 +10,10 @@
       This page provides access to the Kumasi measurement dataset. 
       Download the full dataset or use the public API for research, analysis, and integration.
     </p>
-    <article>
+    <nav>
       <a href="/">Back to map</a>
       <a href="/api-key">Request API</a>
-    </article>
+    </nav>
   </section>
   <section>
     <h2>Donwload</h2>
@@ -127,6 +127,7 @@
       GET <span class="endpoint" data-path="/api/public/data?apiKey=YOUR_KEY&includeMeasurements=true&mLimit=6"></span>
     </p>
   </section>
+  
   <section>
     <details class="accordion">
       <summary><h2>Disclaimer</h2></summary>
