@@ -64,3 +64,17 @@
         </p>
     </section>
 </main>
+
+<style>
+    main {
+        height: 82%;
+        align-items: center;
+        padding: 20px;
+        color: var(--DEF-Blue-Tekst);
+        max-width: 750px;
+        margin: auto;
+    }
+    p {
+        margin-bottom: 10px;
+    }
+</style>
