@@ -1,13 +1,14 @@
 import { DirectusService } from '$lib/server/services/directusService'
 
-export async function DELETE({ cookies, params }) {
-	const token = cookies.get('access_token')
-	if (!token) {
+export async function DELETE({ locals, params }) {
+	if (!locals.user) {
 		return new Response(JSON.stringify({ error: 'Unauthorized' }), {
 			status: 401,
 			headers: { 'Content-Type': 'application/json' }
 		})
 	}
+
+	const token = DirectusService.getServerToken()
 
 	const { id } = params
 	if (!id) {

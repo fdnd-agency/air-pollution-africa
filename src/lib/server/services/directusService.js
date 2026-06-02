@@ -25,6 +25,12 @@ export class DirectusService {
 		return res.json()
 	}
 
+	static getServerToken() {
+		const token = String(process.env.DIRECTUS_ADMIN_TOKEN || '').trim()
+		if (!token) throw new Error('DIRECTUS_ADMIN_TOKEN missing in environment.')
+		return token
+	}
+
 	static async #getRoleIdByName(roleName, options = {}) {
 		const name = String(roleName || '').trim()
 		if (!name) return null
@@ -149,6 +155,11 @@ export class DirectusService {
 
 	static async getApiKeyByEmailLower(emailLower, options = {}) {
 		const items = await this.getContent('api_keys', `filter[email_lower][_eq]=${encodeURIComponent(emailLower)}&limit=1`, options)
+		return items[0] || null
+	}
+
+	static async getApaUserByEmailLower(emailLower, options = {}) {
+		const items = await this.getContent('apa_users', `filter[email_lower][_eq]=${encodeURIComponent(emailLower)}&limit=1`, options)
 		return items[0] || null
 	}
 

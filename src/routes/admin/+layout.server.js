@@ -6,6 +6,6 @@ export async function load({ locals, url }) {
 	}
 
 	return {
-		user: locals.user?.data ?? null
+		user: locals.user ?? null
 	}
 }

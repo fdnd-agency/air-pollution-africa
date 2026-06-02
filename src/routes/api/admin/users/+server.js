@@ -2,14 +2,15 @@ import { DirectusService } from '$lib/server/services/directusService'
 
 const ROLE_NAME = 'apa_admin'
 
-export async function GET({ cookies }) {
-	const token = cookies.get('access_token')
-	if (!token) {
+export async function GET({ locals }) {
+	if (!locals.user) {
 		return new Response(JSON.stringify({ error: 'Unauthorized' }), {
 			status: 401,
 			headers: { 'Content-Type': 'application/json' }
 		})
 	}
+
+	const token = DirectusService.getServerToken()
 
 	const users = await DirectusService.getUsers({ roleName: ROLE_NAME }, { token })
 	const cleaned = users.map((user) => ({
@@ -24,14 +25,15 @@ export async function GET({ cookies }) {
 	})
 }
 
-export async function POST({ request, cookies }) {
-	const token = cookies.get('access_token')
-	if (!token) {
+export async function POST({ request, locals }) {
+	if (!locals.user) {
 		return new Response(JSON.stringify({ error: 'Unauthorized' }), {
 			status: 401,
 			headers: { 'Content-Type': 'application/json' }
 		})
 	}
+
+	const token = DirectusService.getServerToken()
 
 	const body = await request.json().catch(() => ({}))
 	const email = String(body.email || '').trim()

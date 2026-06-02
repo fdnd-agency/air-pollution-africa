@@ -7,14 +7,15 @@ function getCreatedId(created) {
 	return created?.data?.id ?? created?.id ?? null
 }
 
-export async function POST({ request, cookies }) {
-	const token = cookies.get('access_token')
-	if (!token) {
+export async function POST({ request, locals }) {
+	if (!locals.user) {
 		return new Response(JSON.stringify({ error: 'Unauthorized' }), {
 			status: 401,
 			headers: { 'Content-Type': 'application/json' }
 		})
 	}
+
+	const token = DirectusService.getServerToken()
 
 	const body = await request.json().catch(() => ({}))
 	const { description, lat, lon, startDate, firstValue } = body

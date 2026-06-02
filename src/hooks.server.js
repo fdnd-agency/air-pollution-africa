@@ -1,15 +1,9 @@
 import { AuthService } from '$lib/server/services/authService.js'
 
 export async function handle({ event, resolve }) {
-	const accessToken = event.cookies.get('access_token')
-	const refreshToken = event.cookies.get('refresh_token')
-
-	if (accessToken) {
-		event.locals.user = await AuthService.getUser(accessToken)
-	}
-
-	if (!event.locals.user && refreshToken) {
-		event.locals.user = await AuthService.refreshSession(event.cookies, refreshToken)
+	const session = AuthService.getSessionFromCookies(event.cookies)
+	if (session) {
+		event.locals.user = session.user
 	}
 
 	return resolve(event)
