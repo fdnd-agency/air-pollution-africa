@@ -1,4 +1,5 @@
 import { DIRECTUS_URL } from '$lib/server/directus.js'
+import { env } from '$env/dynamic/private'
 
 export class DirectusService {
 	static async #request(path, { method = 'GET', body, token } = {}) {
@@ -26,17 +27,9 @@ export class DirectusService {
 	}
 
 	static getServerToken() {
-		const token = String(process.env.DIRECTUS_ADMIN_TOKEN || '').trim()
+		const token = String(env.DIRECTUS_ADMIN_TOKEN || '').trim()
 		if (!token) throw new Error('DIRECTUS_ADMIN_TOKEN missing in environment.')
 		return token
-	}
-
-	static async #getRoleIdByName(roleName, options = {}) {
-		const name = String(roleName || '').trim()
-		if (!name) return null
-		const qs = `?filter[name][_eq]=${encodeURIComponent(name)}&limit=1`
-		const json = await this.#request(`/roles${qs}`, { token: options.token })
-		return json?.data?.[0]?.id || null
 	}
 
 	static async getContent(collection, queryOrOptions = '', options = {}) {
@@ -95,62 +88,45 @@ export class DirectusService {
 
 	static async getUsers(queryOrOptions = '', options = {}) {
 		let query = ''
-		let resolvedOptions = options
-		let roleId
 		let roleName
 
 		if (typeof queryOrOptions === 'string') {
 			query = queryOrOptions
 		} else if (queryOrOptions && typeof queryOrOptions === 'object') {
-			resolvedOptions = queryOrOptions
-			const { query: queryValue = '', roleId: roleIdValue, roleName: roleNameValue } = queryOrOptions
+			const { query: queryValue = '', roleName: roleNameValue } = queryOrOptions
 			query = String(queryValue)
-			roleId = roleIdValue
 			roleName = roleNameValue
 		}
 
-		if (!roleId && roleName) {
-			roleId = await this.#getRoleIdByName(roleName, resolvedOptions)
-		}
-
-		if (roleId) {
+		if (roleName) {
 			const prefix = query ? `${query}&` : ''
-			query = `${prefix}filter[role][_eq]=${encodeURIComponent(roleId)}`
+			query = `${prefix}filter[role][_eq]=${encodeURIComponent(roleName)}`
 		}
 
-		const qs = query ? `?${query}` : ''
-		const json = await this.#request(`/users${qs}`, { token: resolvedOptions.token })
-		return Array.isArray(json?.data) ? json.data : []
+		return this.getContent('apa_users', query, options)
 	}
 
-	static async createUser({ email, password, roleId, roleName, status = 'active' }, options = {}) {
+	static async createUser({ email, role = 'researcher', active = true }, options = {}) {
 		const trimmedEmail = String(email || '').trim()
 		if (!trimmedEmail) throw new Error('Email is required.')
-		const resolvedPassword = String(password || '')
-		if (!resolvedPassword) throw new Error('Password is required.')
 
-		let resolvedRoleId = roleId
-		if (!resolvedRoleId && roleName) {
-			resolvedRoleId = await this.#getRoleIdByName(roleName, options)
-		}
-		if (!resolvedRoleId) throw new Error('Role id or role name is required.')
-
-		return this.#request('/users', {
-			method: 'POST',
-			body: {
+		// Passwordless: creating a user just authorizes an email for login-code sign-in.
+		return this.postContent(
+			'apa_users',
+			{
 				email: trimmedEmail,
-				password: resolvedPassword,
-				role: resolvedRoleId,
-				status
+				email_lower: trimmedEmail.toLowerCase(),
+				role,
+				active
 			},
-			token: options.token
-		})
+			options
+		)
 	}
 
 	static async deleteUser(id, options = {}) {
 		const userId = String(id || '').trim()
 		if (!userId) throw new Error('User id is required.')
-		return this.#request(`/users/${userId}`, { method: 'DELETE', token: options.token })
+		return this.deleteContent('apa_users', userId, options)
 	}
 
 	static async getApiKeyByEmailLower(emailLower, options = {}) {

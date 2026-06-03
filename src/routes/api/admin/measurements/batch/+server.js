@@ -37,7 +37,7 @@ export async function POST({ request, locals }) {
 	const items = []
 
 	for (const [index, entry] of entries.entries()) {
-		const pointId = entry.pointId
+		const { pointId } = entry
 		if (!pointId) continue
 
 		const tubeId = entry.tube_id === null || entry.tube_id === undefined ? '' : String(entry.tube_id).trim()

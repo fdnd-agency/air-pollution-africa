@@ -5,6 +5,8 @@
 	const pendingEmail = $derived(form?.email ?? data.pendingEmail ?? '')
 	const error = $derived(form?.error ?? null)
 	const step = $derived(form?.step ?? (pendingEmail ? 'verify' : 'request'))
+	// Dev only: present when DEV_SHOW_LOGIN_CODE is enabled, never in production.
+	const devCode = $derived(form?.devCode ?? null)
 </script>
 
 <main>
@@ -39,6 +41,15 @@
 				>
 			</form>
 
+			{#if devCode}
+				<div class="dev-code-warning" role="alert">
+					<strong>⚠ Dev mode</strong> — your login code is <code>{devCode}</code>.
+					<br />
+					Shown only because <code>DEV_SHOW_LOGIN_CODE</code> is enabled. This must never be on in
+					production.
+				</div>
+			{/if}
+
 			{#if step === 'verify'}
 				<form
 					method="POST"
@@ -71,3 +82,23 @@
 		</div>
 	</div>
 </main>
+
+<style>
+	.dev-code-warning {
+		margin: 1rem 0;
+		padding: 0.75rem 1rem;
+		border: 1px solid #f0c36d;
+		border-radius: 6px;
+		background: #fff8e1;
+		color: #6b4e00;
+		font-size: 0.9rem;
+		line-height: 1.4;
+	}
+
+	.dev-code-warning code {
+		padding: 0.1rem 0.3rem;
+		border-radius: 4px;
+		background: rgba(0, 0, 0, 0.06);
+		font-weight: 700;
+	}
+</style>

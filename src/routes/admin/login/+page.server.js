@@ -1,4 +1,5 @@
 import { fail, redirect } from '@sveltejs/kit'
+import { dev } from '$app/environment'
 import { AuthService } from '$lib/server/services/authService'
 
 /** @type {import('./$types').PageServerLoad} */
@@ -30,7 +31,7 @@ export const actions = {
 			cookies.set('pending_login_email', result.emailLower, {
 				path: '/',
 				httpOnly: true,
-				secure: process.env.NODE_ENV === 'production',
+				secure: !dev,
 				sameSite: 'lax',
 				maxAge: 60 * 10
 			})
@@ -38,7 +39,9 @@ export const actions = {
 			return {
 				requested: true,
 				step: 'verify',
-				email
+				email,
+				// Present only in dev when DEV_SHOW_LOGIN_CODE is enabled; never in production.
+				devCode: result.devCode
 			}
 		} catch (error) {
 			console.error('Failed to request login code:', error)

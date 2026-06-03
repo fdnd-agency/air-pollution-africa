@@ -12,7 +12,7 @@ export async function load({ locals }) {
 	const points = DirectusService.getContent('apa_sampling_points', { token })
 	const measurements = DirectusService.getContent('apa_measurements', { token })
 	const tubes = DirectusService.getContent('apa_tubes', { token })
-	const users = DirectusService.getUsers({ roleName: 'apa_admin' }, { token })
+	const users = DirectusService.getUsers('', { token })
 
 	return { points, measurements, tubes, users, keuzes }
 }

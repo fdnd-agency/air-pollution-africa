@@ -1,6 +1,6 @@
 import { DirectusService } from '$lib/server/services/directusService'
 
-const ROLE_NAME = 'apa_admin'
+const ALLOWED_ROLES = ['researcher', 'admin']
 
 export async function GET({ locals }) {
 	if (!locals.user) {
@@ -12,12 +12,12 @@ export async function GET({ locals }) {
 
 	const token = DirectusService.getServerToken()
 
-	const users = await DirectusService.getUsers({ roleName: ROLE_NAME }, { token })
+	const users = await DirectusService.getUsers('', { token })
 	const cleaned = users.map((user) => ({
 		id: user.id,
 		email: user.email,
 		role: user.role,
-		status: user.status
+		active: user.active
 	}))
 
 	return new Response(JSON.stringify(cleaned), {
@@ -37,16 +37,23 @@ export async function POST({ request, locals }) {
 
 	const body = await request.json().catch(() => ({}))
 	const email = String(body.email || '').trim()
-	const password = String(body.password || '')
+	const role = String(body.role || 'researcher').trim()
 
-	if (!email || !password) {
-		return new Response(JSON.stringify({ error: 'Email and password are required.' }), {
+	if (!email) {
+		return new Response(JSON.stringify({ error: 'Email is required.' }), {
 			status: 400,
 			headers: { 'Content-Type': 'application/json' }
 		})
 	}
 
-	const created = await DirectusService.createUser({ email, password, roleName: ROLE_NAME }, { token })
+	if (!ALLOWED_ROLES.includes(role)) {
+		return new Response(JSON.stringify({ error: `role must be one of: ${ALLOWED_ROLES.join(', ')}.` }), {
+			status: 400,
+			headers: { 'Content-Type': 'application/json' }
+		})
+	}
+
+	const created = await DirectusService.createUser({ email, role }, { token })
 
 	return new Response(JSON.stringify(created?.data ?? created), {
 		status: 201,
