@@ -1,70 +1,73 @@
 import { compare } from 'bcryptjs'
 import generateCode from '$lib/server/helpers/generateCode'
+import { DirectusService } from '$lib/server/services/directusService'
 
 const CODE_TTL_MS = 10 * 60 * 1000
 const MAX_ATTEMPTS = 5
-const PRUNE_INTERVAL_MS = 5 * 60 * 1000
+
+const COLLECTION = 'apa_login_codes'
 
 export class LoginCodeManager {
-	static #codes = new Map()
-
-	static async createCode(emailLower) {
-		const key = String(emailLower || '').trim().toLowerCase()
-		if (!key) throw new Error('Email is required to create a login code.')
+	/**
+	 * Creates a one-time login code for a user and stores its hash in Directus.
+	 * @param {string} userId - apa_users id
+	 * @returns {Promise<{ code: string, expiresAt: string }>} plaintext code (email only) + ISO expiry
+	 */
+	static async createCode(userId) {
+		const id = String(userId || '').trim()
+		if (!id) throw new Error('A user id is required to create a login code.')
 
 		const { plain, hash } = await generateCode()
-		const now = Date.now()
-		const entry = {
-			emailLower: key,
-			hash,
-			attempts: 0,
-			createdAt: now,
-			expiresAt: now + CODE_TTL_MS
-		}
+		const expiresAt = new Date(Date.now() + CODE_TTL_MS).toISOString()
 
-		this.#codes.set(key, entry)
-		return { code: plain, expiresAt: entry.expiresAt }
+		await DirectusService.postContent(COLLECTION, { user: id, code_hash: hash, expires_at: expiresAt }, { token: DirectusService.getServerToken() })
+
+		return { code: plain, expiresAt }
 	}
 
-	static async verifyCode(emailLower, code) {
-		const key = String(emailLower || '').trim().toLowerCase()
+	/**
+	 * Verifies a submitted code against the newest unused, unexpired code for the user.
+	 * On success the code is marked used (single-use) so it can't be replayed.
+	 * @param {string} userId - apa_users id
+	 * @param {string} code
+	 * @returns {Promise<{ ok: boolean, error?: string }>}
+	 */
+	static async verifyCode(userId, code) {
+		const id = String(userId || '').trim()
 		const value = String(code || '').trim()
-		if (!key || !value) return { ok: false, error: 'Invalid code.' }
+		if (!id || !value) return { ok: false, error: 'Invalid code.' }
 
-		const entry = this.#codes.get(key)
+		const token = DirectusService.getServerToken()
+		const nowIso = new Date().toISOString()
+
+		const query = [`filter[user][_eq]=${encodeURIComponent(id)}`, 'filter[used_at][_null]=true', `filter[expires_at][_gt]=${encodeURIComponent(nowIso)}`, 'sort=-date_created', 'limit=1'].join('&')
+
+		const [entry] = await DirectusService.getContent(COLLECTION, query, { token })
 		if (!entry) return { ok: false, error: 'Invalid or expired code.' }
 
-		if (entry.expiresAt <= Date.now()) {
-			this.#codes.delete(key)
-			return { ok: false, error: 'Invalid or expired code.' }
-		}
+		const attempts = Number(entry.attempts) || 0
 
-		if (entry.attempts >= MAX_ATTEMPTS) {
-			this.#codes.delete(key)
+		// Already exhausted: burn the code so it can't be used any further.
+		if (attempts >= MAX_ATTEMPTS) {
+			await DirectusService.updateContent(COLLECTION, entry.id, { used_at: nowIso }, { token })
 			return { ok: false, error: 'Too many attempts.' }
 		}
 
-		const ok = await compare(value, entry.hash)
+		const ok = await compare(value, entry.code_hash)
 		if (!ok) {
-			entry.attempts += 1
-			if (entry.attempts >= MAX_ATTEMPTS) this.#codes.delete(key)
+			const nextAttempts = attempts + 1
+			const patch = { attempts: nextAttempts }
+			// Burn the code once the cap is reached.
+			if (nextAttempts >= MAX_ATTEMPTS) patch.used_at = nowIso
+			await DirectusService.updateContent(COLLECTION, entry.id, patch, { token })
 			return { ok: false, error: 'Invalid or expired code.' }
 		}
 
-		this.#codes.delete(key)
+		await DirectusService.updateContent(COLLECTION, entry.id, { used_at: nowIso }, { token })
 		return { ok: true }
-	}
-
-	static pruneExpired() {
-		const now = Date.now()
-		for (const [key, entry] of this.#codes) {
-			if (entry.expiresAt <= now) this.#codes.delete(key)
-		}
 	}
 
 	static get ttlMs() {
 		return CODE_TTL_MS
 	}
 }
-
-setInterval(() => LoginCodeManager.pruneExpired(), PRUNE_INTERVAL_MS).unref()

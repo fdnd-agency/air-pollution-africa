@@ -1,11 +1,10 @@
 <script>
 	/** @type {import('./$types').PageProps} */
-	let { data, form } = $props()
+	const { data, form } = $props()
 
-	const pendingEmail = form?.email ?? data.pendingEmail ?? ''
-	const code = form?.code ?? null
-	const error = form?.error ?? null
-	const step = form?.step ?? (pendingEmail ? 'verify' : 'request')
+	const pendingEmail = $derived(form?.email ?? data.pendingEmail ?? '')
+	const error = $derived(form?.error ?? null)
+	const step = $derived(form?.step ?? (pendingEmail ? 'verify' : 'request'))
 </script>
 
 <main>
@@ -40,15 +39,6 @@
 				>
 			</form>
 
-			{#if code}
-				<div
-					class="auth-error"
-					style="background:#eef6ff;border-color:#cfe3ff;color:#0b3d91;"
-				>
-					<strong>Your login code: {code}</strong>
-				</div>
-			{/if}
-
 			{#if step === 'verify'}
 				<form
 					method="POST"
@@ -77,7 +67,7 @@
 				</form>
 			{/if}
 
-			<p class="auth-footer-text">You’ll receive a 6-digit code by email within a few seconds</p>
+			<p class="auth-footer-text">You'll receive a 6-digit code by email within a few seconds</p>
 		</div>
 	</div>
 </main>

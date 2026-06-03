@@ -16,10 +16,10 @@ export class AuthService {
 		if (!user) return { success: false, error: 'No account found for this email.' }
 		if (user.active === false) return { success: false, error: 'This account is inactive.' }
 
-		const { code, expiresAt } = await LoginCodeManager.createCode(normalized.emailLower)
+		const { code, expiresAt } = await LoginCodeManager.createCode(user.id)
 		await this.#sendLoginCodeEmail(normalized.emailLower, code)
 
-		return { success: true, code, expiresAt, emailLower: normalized.emailLower }
+		return { success: true, expiresAt, emailLower: normalized.emailLower }
 	}
 
 	static async verifyLoginCode(email, code, cookies) {
@@ -33,19 +33,12 @@ export class AuthService {
 		if (!user) return { success: false, error: 'Invalid or expired code.' }
 		if (user.active === false) return { success: false, error: 'This account is inactive.' }
 
-		const result = await LoginCodeManager.verifyCode(normalized.emailLower, code)
+		const result = await LoginCodeManager.verifyCode(user.id, code)
 		if (!result.ok) return { success: false, error: result.error || 'Invalid or expired code.' }
 
-		const session = SessionManager.createSession({
-			id: user.id,
-			email: user.email,
-			emailLower: user.email_lower,
-			role: user.role,
-			active: user.active,
-			lastLoginAt: user.last_login_at
-		})
+		const session = await SessionManager.createSession(user.id)
 
-		this.#setSessionCookie(cookies, session.id)
+		this.#setSessionCookie(cookies, session.token)
 
 		this.#updateLoginTimestamp(user, token).catch((error) => {
 			console.error('Failed to update login timestamp:', error)
@@ -54,23 +47,23 @@ export class AuthService {
 		return { success: true, session }
 	}
 
-	static getSessionFromCookies(cookies) {
-		const sessionId = cookies.get(SESSION_COOKIE)
-		if (!sessionId) return null
+	static async getSessionFromCookies(cookies) {
+		const sessionToken = cookies.get(SESSION_COOKIE)
+		if (!sessionToken) return null
 
-		const session = SessionManager.getSession(sessionId, { touch: true })
+		const session = await SessionManager.getSession(sessionToken, { touch: true })
 		if (!session) {
 			cookies.delete(SESSION_COOKIE, { path: '/' })
 			return null
 		}
 
-		this.#setSessionCookie(cookies, sessionId)
+		this.#setSessionCookie(cookies, sessionToken)
 		return session
 	}
 
-	static logout(cookies) {
-		const sessionId = cookies.get(SESSION_COOKIE)
-		if (sessionId) SessionManager.deleteSession(sessionId)
+	static async logout(cookies) {
+		const sessionToken = cookies.get(SESSION_COOKIE)
+		if (sessionToken) await SessionManager.deleteSession(sessionToken)
 		cookies.delete(SESSION_COOKIE, { path: '/' })
 	}
 

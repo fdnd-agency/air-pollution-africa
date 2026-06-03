@@ -38,8 +38,7 @@ export const actions = {
 			return {
 				requested: true,
 				step: 'verify',
-				email,
-				code: result.code
+				email
 			}
 		} catch (error) {
 			console.error('Failed to request login code:', error)
@@ -54,17 +53,20 @@ export const actions = {
 			return fail(400, { error: 'Email and code are required.', step: 'verify', email })
 		}
 
+		let result
 		try {
-			const result = await AuthService.verifyLoginCode(email, code, cookies)
-			if (!result.success) {
-				return fail(400, { error: result.error || 'Verification failed.', step: 'verify', email })
-			}
-
-			cookies.delete('pending_login_email', { path: '/' })
-			throw redirect(303, '/admin')
+			result = await AuthService.verifyLoginCode(email, code, cookies)
 		} catch (error) {
 			console.error('Login code verification failed:', error)
 			return fail(500, { error: 'Failed to verify login code.', step: 'verify', email })
 		}
+
+		if (!result.success) {
+			return fail(400, { error: result.error || 'Verification failed.', step: 'verify', email })
+		}
+
+		cookies.delete('pending_login_email', { path: '/' })
+
+		throw redirect(303, '/admin')
 	}
 }
