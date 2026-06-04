@@ -10,6 +10,13 @@ export async function GET({ locals }) {
 		})
 	}
 
+	if (locals.user.role !== 'admin') {
+		return new Response(JSON.stringify({ error: 'Forbidden: admin role required.' }), {
+			status: 403,
+			headers: { 'Content-Type': 'application/json' }
+		})
+	}
+
 	const token = DirectusService.getServerToken()
 
 	const users = await DirectusService.getUsers('', { token })
@@ -29,6 +36,13 @@ export async function POST({ request, locals }) {
 	if (!locals.user) {
 		return new Response(JSON.stringify({ error: 'Unauthorized' }), {
 			status: 401,
+			headers: { 'Content-Type': 'application/json' }
+		})
+	}
+
+	if (locals.user.role !== 'admin') {
+		return new Response(JSON.stringify({ error: 'Forbidden: admin role required.' }), {
+			status: 403,
 			headers: { 'Content-Type': 'application/json' }
 		})
 	}
