@@ -11,7 +11,7 @@ export async function GET({ locals }) {
 
 	const token = DirectusService.getServerToken()
 
-	const [points, measurements] = await Promise.all([DirectusService.getContent('apa_sampling_points', { token }), DirectusService.getContent('apa_measurements', { token })])
+	const [points, measurements] = await Promise.all([DirectusService.getContent('apa_sampling_points', 'limit=-1', { token }), DirectusService.getContent('apa_measurements', 'limit=-1', { token })])
 
 	const items = buildPointsWithMeasurements(points, measurements)
 

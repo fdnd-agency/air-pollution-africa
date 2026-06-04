@@ -132,7 +132,7 @@ export class DirectusService {
 	}
 
 	static async getApiKeyByEmailLower(emailLower, options = {}) {
-		const items = await this.getContent('api_keys', `filter[email_lower][_eq]=${encodeURIComponent(emailLower)}&limit=1`, options)
+		const items = await this.getContent('apa_api_clients', `filter[email_lower][_eq]=${encodeURIComponent(emailLower)}&limit=1`, options)
 		return items[0] || null
 	}
 
@@ -143,36 +143,31 @@ export class DirectusService {
 
 	static async upsertApiKeyRequest({ email, emailLower, verifyCodeHash, verifyExpiresAt }, options = {}) {
 		const existing = await this.getApiKeyByEmailLower(emailLower, options)
+		// (Re)requesting resets verification and clears any previously issued key.
 		const payload = {
 			email,
 			email_lower: emailLower,
 			verify_code_hash: verifyCodeHash,
-			verify_expires_at: verifyExpiresAt
+			verify_expires_at: verifyExpiresAt,
+			verified: false,
+			api_key_hash: null
 		}
 
 		if (existing?.id) {
-			await this.updateContent('api_keys', existing.id, payload, options)
+			await this.updateContent('apa_api_clients', existing.id, payload, options)
 			return existing
 		}
 
-		const created = await this.postContent(
-			'api_keys',
-			{
-				...payload,
-				verified: false
-			},
-			options
-		)
-
+		const created = await this.postContent('apa_api_clients', payload, options)
 		return created?.data || null
 	}
 
-	static async issueApiKey({ id, apiKey }, options = {}) {
+	static async issueApiKey({ id, apiKeyHash }, options = {}) {
 		return this.updateContent(
-			'api_keys',
+			'apa_api_clients',
 			id,
 			{
-				api_key: apiKey,
+				api_key_hash: apiKeyHash,
 				verified: true,
 				verify_code_hash: null,
 				verify_expires_at: null
