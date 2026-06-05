@@ -23,7 +23,9 @@ export class DirectusService {
 			throw new Error(`Directus request failed (${res.status}): ${text}`)
 		}
 
-		return res.json()
+		if (res.status === 204) return null
+		const text = await res.text()
+		return text ? JSON.parse(text) : null
 	}
 
 	static getServerToken() {
