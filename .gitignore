@@ -25,5 +25,5 @@ vite.config.ts.timestamp-*
 # Playwright
 test-results
 
-# Voor als er een backup is gemaakt doe ik steeds als zip
+# Backups (always zipped)
 *.zip

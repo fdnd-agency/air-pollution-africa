@@ -2,9 +2,8 @@ import { DirectusService } from '$lib/server/services/directusService'
 import csvEscape from '$lib/server/helpers/csvEscape'
 import { buildFlatRows, buildPointsWithMeasurements } from '$lib/server/helpers/exportData'
 
-export async function GET({ cookies }) {
-	const token = cookies.get('access_token')
-	const [points, measurements] = await Promise.all([DirectusService.getContent('apa_sampling_points', { token }), DirectusService.getContent('apa_measurements', { token })])
+export async function GET() {
+	const [points, measurements] = await Promise.all([DirectusService.getContent('apa_sampling_points', 'limit=-1'), DirectusService.getContent('apa_measurements', 'limit=-1')])
 
 	const items = buildPointsWithMeasurements(points, measurements)
 	const { rows, headers } = buildFlatRows(items)

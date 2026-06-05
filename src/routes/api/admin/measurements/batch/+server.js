@@ -88,8 +88,6 @@ export async function POST({ request, locals }) {
 			value = num
 		}
 
-		// 'no measurement' is stored as a null value — apa_measurements.value is
-		// nullable and there is no separate flag column in the schema.
 		items.push({
 			sampling_point: pointId,
 			date: measurementDate.toISOString(),

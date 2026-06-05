@@ -1,5 +1,6 @@
 import { DirectusService } from '$lib/server/services/directusService'
 import { buildPointsWithMeasurements } from '$lib/server/helpers/exportData'
+import { verifyApiKey } from '$lib/server/helpers/requireApiKey'
 
 function parseMonthToUTC(monthStr) {
 	if (typeof monthStr !== 'string') return null
@@ -66,7 +67,15 @@ function applyMeasurementLimits(items, { latestOnly, mLimit }) {
 	})
 }
 
-export async function GET({ url }) {
+export async function GET({ url, request }) {
+	const client = await verifyApiKey({ request, url })
+	if (!client) {
+		return new Response(JSON.stringify({ error: "Valid API key required. Provide it via the 'x-api-key' header." }), {
+			status: 401,
+			headers: { 'Content-Type': 'application/json' }
+		})
+	}
+
 	const params = url.searchParams
 	const page = clampInt(params.get('page'), 1, 1000000, 1)
 	const limit = clampInt(params.get('limit'), 1, 200, 50)
