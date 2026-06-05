@@ -3,14 +3,15 @@ import { DirectusService } from '$lib/server/services/directusService'
 const MEASUREMENT_MIN = 0
 const MEASUREMENT_MAX = 200
 
-export async function POST({ request, cookies }) {
-	const token = cookies.get('access_token')
-	if (!token) {
+export async function POST({ request, locals }) {
+	if (!locals.user) {
 		return new Response(JSON.stringify({ error: 'Unauthorized' }), {
 			status: 401,
 			headers: { 'Content-Type': 'application/json' }
 		})
 	}
+
+	const token = DirectusService.getServerToken()
 
 	const body = await request.json().catch(() => ({}))
 	const { year, month, entries } = body
@@ -36,7 +37,7 @@ export async function POST({ request, cookies }) {
 	const items = []
 
 	for (const [index, entry] of entries.entries()) {
-		const pointId = entry.pointId
+		const { pointId } = entry
 		if (!pointId) continue
 
 		const tubeId = entry.tube_id === null || entry.tube_id === undefined ? '' : String(entry.tube_id).trim()
