@@ -1,11 +1,11 @@
-import { DirectusService } from '$lib/server/services/directusService'
-import keuzes from '../../static/keuzes.json'
+import { listCities } from '$lib/server/services/cityService'
 
-/** @type {import('./$types').PageServerLoad} */
+/**
+ * Root landing page: a picker that lists the available cities and links into
+ * each one's dashboard at `/<slug>`.
+ * @type {import('./$types').PageServerLoad}
+ */
 export async function load() {
-	const points = DirectusService.getContent('apa_sampling_points')
-	const measurements = DirectusService.getContent('apa_measurements')
-	const tubes = DirectusService.getContent('apa_tubes')
-
-	return { points, measurements, tubes, keuzes }
+	const cities = await listCities()
+	return { cities }
 }

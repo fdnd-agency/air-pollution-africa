@@ -2,7 +2,8 @@ import { AuthService } from '$lib/server/services/authService.js'
 import { createRateLimiter } from '$lib/server/helpers/rateLimiter.js'
 
 const WINDOW_MS = 15 * 60 * 1000
-const LOGIN_PATH = '/admin/login'
+// City-aware: the login form now lives at /<city>/admin/login, so match on suffix.
+const LOGIN_PATH_SUFFIX = '/admin/login'
 
 const requestLimiter = createRateLimiter({ windowMs: WINDOW_MS, max: 5 })
 const verifyLimiter = createRateLimiter({ windowMs: WINDOW_MS, max: 10 })
@@ -25,7 +26,7 @@ export async function handle({ event, resolve }) {
  * @param {import('@sveltejs/kit').RequestEvent} event
  */
 function checkLoginRateLimit(event) {
-	if (event.request.method !== 'POST' || event.url.pathname !== LOGIN_PATH) {
+	if (event.request.method !== 'POST' || !event.url.pathname.endsWith(LOGIN_PATH_SUFFIX)) {
 		return null
 	}
 
