@@ -1,11 +1,8 @@
 <script>
 	import Logo from '$lib/assets/logo.png'
-	import { Map } from '$lib'
 
 	/** @type {import('./$types').PageProps} */
 	const { data } = $props()
-
-	console.log(map)
 </script>
 
 <main class="picker">

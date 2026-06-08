@@ -1,5 +1,6 @@
 <script>
     /** @type {import('./$types').PageProps} */
+    import { Map } from '$lib'
     const { data } = $props()
 </script>
 
@@ -15,6 +16,8 @@
         </div>
     </section>
 </main>
+
+<Map/>
 
 <section id="tableControl" class="tableControl">
   <select id="tableMonth" class="tcSelect" aria-label="Select month"></select>
