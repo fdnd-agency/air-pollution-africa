@@ -8,7 +8,7 @@
 		activeMapAddresses = [],
 		mapClass = '',
 		initialZoom = 15,
-		initialView = [52.35846685, 4.91372582947583]
+		initialView = [6.69438, -1.61915]
 	} = $props();
 
 	// 2. Standard variables. Do NOT use $state() for Leaflet instances or DOM nodes
@@ -17,6 +17,18 @@
 	let map;
 	let leaflet;
 	let markers = [];
+
+	function createMarkerPopup(marker) {
+		const popup = new L.popup({});
+		popup.setContent(
+			`<div style="width: 100px;">
+        <p><strong>${marker.street}</strong> ${marker.house_number} ${marker.floor ?? ''} ${marker.addition ?? ''}</p>
+        <img width="${marker.poster.covers[0].directus_files_id.width}" height="${marker.poster.covers[0].directus_files_id.height}" style="width: 100%; height: auto; margin-bottom: 0.75rem;" src="https://fdnd-agency.directus.app/assets/${marker.poster.covers[0].directus_files_id.id}" alt="Afbeelding van ${marker.street} ${marker.house_number} ${marker.floor ?? ''} ${marker.addition ?? ''}">
+        <a href="/adressen/${marker.id}" data-sveltekit-reload>Bekijk poster</a>
+      </div>`
+		);
+		return popup;
+	}
 
 	async function initializeMap() {
 		// Dynamic import ensures this only runs in the browser, preventing Server-Side Rendering (SSR) crashes
