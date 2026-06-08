@@ -1,7 +1,7 @@
 <script>
     /** @type {import('./$types').PageProps} */
     import { Map } from '$lib'
-    const { data } = $props()
+    let { data } = $props()
 </script>
 
 <main class="home-layout">
@@ -17,7 +17,7 @@
     </section>
 </main>
 
-<Map/>
+<Map sampling_points={ data.sampling_points }/>
 
 <section id="tableControl" class="tableControl">
   <select id="tableMonth" class="tcSelect" aria-label="Select month"></select>

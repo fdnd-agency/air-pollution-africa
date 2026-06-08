@@ -1,9 +1,9 @@
 <script>
 	import { onDestroy, onMount } from 'svelte';
-	// 1. Import CSS directly in the script so Vite bundles it properly
 	import 'leaflet/dist/leaflet.css';
 
 	let {
+		sampling_points,
 		mapAddresses = [],
 		activeMapAddresses = [],
 		mapClass = '',
@@ -11,27 +11,14 @@
 		initialView = [6.69438, -1.61915]
 	} = $props();
 
-	// 2. Standard variables. Do NOT use $state() for Leaflet instances or DOM nodes
-	// unless you need them to trigger Svelte UI updates.
 	let mapElement;
 	let map;
 	let leaflet;
-	let markers = [];
-
-	function createMarkerPopup(marker) {
-		const popup = new L.popup({});
-		popup.setContent(
-			`<div style="width: 100px;">
-        <p><strong>${marker.street}</strong> ${marker.house_number} ${marker.floor ?? ''} ${marker.addition ?? ''}</p>
-        <img width="${marker.poster.covers[0].directus_files_id.width}" height="${marker.poster.covers[0].directus_files_id.height}" style="width: 100%; height: auto; margin-bottom: 0.75rem;" src="https://fdnd-agency.directus.app/assets/${marker.poster.covers[0].directus_files_id.id}" alt="Afbeelding van ${marker.street} ${marker.house_number} ${marker.floor ?? ''} ${marker.addition ?? ''}">
-        <a href="/adressen/${marker.id}" data-sveltekit-reload>Bekijk poster</a>
-      </div>`
-		);
-		return popup;
-	}
+	let L
 
 	async function initializeMap() {
 		// Dynamic import ensures this only runs in the browser, preventing Server-Side Rendering (SSR) crashes
+		L = await import ('leaflet')
 		leaflet = await import('leaflet');
 
 		const mapStyle = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
@@ -40,14 +27,25 @@
 		// Initialize map on the bound DOM element
 		map = leaflet.map(mapElement).setView(initialView, initialZoom);
 
+		
 		leaflet.tileLayer(mapStyle, { attribution }).addTo(map);
+		
+		sampling_points.forEach(coord => {	
+			var circle = L.circle([coord.latitude, coord.longitude], {
+				color: 'red',
+				fillColor: '#f03',
+				fillOpacity: 0.5,
+				radius: 500
+			}).addTo(map);
+		});
 
 		// Failsafe: Forces Leaflet to recalculate the container size
 		setTimeout(() => {
 			map.invalidateSize();
 		}, 100);
 	}
-
+	
+	
 	onMount(() => {
 		initializeMap();
 	});
