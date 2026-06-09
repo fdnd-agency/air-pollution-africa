@@ -17,7 +17,7 @@
     </section>
 </main>
 
-<Map sampling_points={ data.sampling_points }/>
+<Map sampling_points={ data.sampling_points } measurements={ data.measurements }/>
 
 <section id="tableControl" class="tableControl">
   <select id="tableMonth" class="tcSelect" aria-label="Select month"></select>

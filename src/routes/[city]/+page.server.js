@@ -15,7 +15,7 @@ export async function load({ parent }) {
 	}
 
 	    try {
-        const response = await fetch(`https://fdnd-agency.directus.app/items/apa_sampling_points?fields=longitude,latitude,city`)
+        const response = await fetch(`https://fdnd-agency.directus.app/items/apa_sampling_points?fields=longitude,latitude,location,description, id`)
  
         if (!response.ok) {
             console.error('Failed to fetch sampling points:', response.status)
@@ -31,7 +31,7 @@ export async function load({ parent }) {
 	catch (error) {
         console.error('Load error:', error)
     }
-    // console.log(sampling_points)
+    // console.log(measurements)
 
 	return { city, citySlug, points, measurements, tubes, keuzes, sampling_points }
 }
