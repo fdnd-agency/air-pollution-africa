@@ -100,3 +100,101 @@
     <img alt="Afbeelding van de meetbuisjes" src={tubes} height="450" width="375">
     <p>Site created by Jamie Buffing</p>
 </main>
+
+<style>
+	main {
+		height: 82%;
+		align-items: center;
+		padding: 20px;
+		color: var(--DEF-Blue-Tekst);
+		max-width: 750px;
+		margin: auto;
+	}
+
+	main > p {
+		margin-bottom: 10px;
+	}
+
+	main ul {
+		margin-top: -10px;
+		margin-left: 20px;
+	}
+
+	main > div {
+		width: 100%;
+		height: auto;
+		display: grid;
+		justify-self: center;
+		grid-template-columns: auto 1fr;
+		grid-template-rows: repeat(6, 1fr);
+		grid-column-gap: 0px;
+		grid-row-gap: 0px;
+		margin-bottom: 10px;
+	}
+
+	main > div p {
+		padding: 10px;
+	}
+
+	.Kleur {
+		width: 50px;
+	}
+
+	.k1 {
+		background-color: rgb(54, 0, 54);
+	}
+	.k2 {
+		background-color: rgb(150, 0, 150);
+	}
+	.k3 {
+		background-color: rgb(255, 0, 0);
+	}
+	.k4 {
+		background-color: rgb(255, 165, 0);
+	}
+	.k5 {
+		background-color: rgb(255, 255, 0);
+	}
+	.k6 {
+		background-color: rgb(0, 255, 0);
+	}
+
+	main img {
+		width: 50%;
+		display: flex;
+		justify-self: center;
+		border: solid 1px var(--DEF-Border);
+		border-radius: 15px;
+		margin: 10px;
+	}
+
+	main img:last-of-type {
+		width: 80%;
+	}
+
+	.accordion summary {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		cursor: pointer;
+	}
+
+	.accordion summary::marker {
+		content: '';
+	}
+
+	.accordion summary::after {
+		content: '';
+		width: 8px;
+		height: 8px;
+		border-right: 2px solid currentColor;
+		border-bottom: 2px solid currentColor;
+		transform: rotate(45deg);
+		transition: transform 0.2s ease;
+		margin-left: 8px;
+	}
+
+	.accordion[open] summary::after {
+		transform: rotate(-135deg);
+	}
+</style>

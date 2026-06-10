@@ -1,5 +1,6 @@
 import adapter from '@sveltejs/adapter-auto';
 import { DIRECTUS_URL } from './src/lib/constants.js'
+import { blob } from 'stream/consumers';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -18,7 +19,7 @@ const config = {
 				'default-src': ['self'],
 				'script-src': ['self'],
 				'style-src': ['self', 'unsafe-inline'], // Required for Svelte transitions
-				'img-src': ['self', 'data:', DIRECTUS_URL],
+				'img-src': ['self', 'data:', 'blob:', DIRECTUS_URL, 'https://tile.openstreetmap.org/' ],
 				'font-src': ['self'],
 				'connect-src': ['self', DIRECTUS_URL],
 				'frame-src': ['self', DIRECTUS_URL], // PDF viewer iframes in publicaties
