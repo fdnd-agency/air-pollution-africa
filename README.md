@@ -6,7 +6,6 @@
   * [Installation](#installation)
   * [User Manual](#user-manual)
   * [Installation](#installation)
-  * [Dev](#dev)
   * [Changelog](#changelog)
   * [Teammembers](#team-members)
   * [Sources](#sources)
@@ -18,8 +17,6 @@
 Air-pollution Africa is a project that began with [Jamie Buffing]() at CMD, but has now reached FDND-agency. This project is to measure the air pollution in cities where the readings might not always be correct from an aerial view. The city of Kumasi in Ghana has test tubes where they measure the amount of pollution and send their data into an excel sheet. Now the effect of air pollution can be seen to everyone who is curious about it through this project.
 
 ## Techniques
-
-### Common techniques:
 
 As is expected we've used some techniques that span across all pages. We have used these to make this website:
 ![SvelteKit 5](https://img.shields.io/badge/SvelteKit-5-FF3E00?style=flat&logo=svelte&logoColor=white)
@@ -47,6 +44,9 @@ As is expected we've used some techniques that span across all pages. We have us
 
 
 ## User Manual
+
+### 'Hackable url'
+With our `[slug]` folder we made it possible to change to the city where there is data available. You can replace the city in the url to `/kumasi` or `/accra` to see the different measures in the air per city, per month.
  
 ### Map
 The map on the current iteration of the homepage is one of the more complex codes on the website. You can interact with the map by dragging with your mouse or finger on mobile, this way you can navigate through the city of Kumasi in an aerial view. You can zoom in on the map by using the mouse wheel, double clicking on the part you want to be zoomed in on or on mobile use two fingers to press onto the map and divide them to zoom in.
@@ -61,12 +61,7 @@ In the sixth sprint of this project we got the briefing of this project and we m
 In the seventh sprint of this project we started transferring and refactoring some of the code that was in the old project. The front-end devlopers transferred the EJS that was used and made it into proper HTML, while also transferring the CSS to the correct files and trying to understand the map. The CMD students had worked out a few more screens for the new design that is to be applied when the new team works on this. The software-developers worked on the backend of the code so the transferring of the data in Directus and the fetching in the project itself.
 
 ### Sprint 8
-In sprint 8 the front-end and software developers worked on recreating the map that was on the original page and transferred it to Sveltekit 5. The map now works like it did before with the markers in the correct place and the data showing from multiple months
-
-
-## Linking the documents
- 
-If you are curious as to how we came to some of the conclusions in this website there might be some interesting links for you in these documents. 
+In sprint 8 the front-end and software developers worked on recreating the map that was on the original page and transferred it to Sveltekit 5. The map now works like it did before with the markers in the correct place and the data showing from multiple months.
  
  
 ### Teamwork
