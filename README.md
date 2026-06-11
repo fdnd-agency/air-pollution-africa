@@ -54,8 +54,9 @@ The map on the current iteration of the homepage is one of the more complex code
 
 ### Pins
 On the map there are several pins that indicate the air pollution in the city you are currently observing. You can click on the pin and see the results that have been collected of a certain month in a certain year. The pins are differently colored in the way of green to red. Those colors indicate the air pollution.
+<br>
 <img width="520" height="754" alt="Screenshot 2026-06-11 142517" src="https://github.com/user-attachments/assets/89fee77a-250b-45b1-97c0-3fa809ecf9d1" />
-
+</br>
 
 
 
