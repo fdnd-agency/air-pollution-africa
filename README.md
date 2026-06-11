@@ -14,7 +14,7 @@
 
 ## Project Description
 
-Air-pollution Africa is a project that began with [Jamie Buffing]() at CMD, but has now reached FDND-agency. This project is to measure the air pollution in cities where the readings might not always be correct from an aerial view. The city of Kumasi in Ghana has test tubes where they measure the amount of pollution and send their data into an excel sheet. Now the effect of air pollution can be seen to everyone who is curious about it through this project.
+Air-pollution Africa is a project that began with [Jamie Buffing](https://github.com/JamieBuffing/KNMI_KUMASI) at CMD, but has now reached FDND-agency. This project is to measure the air pollution in cities where the readings might not always be correct from an aerial view. The city of Kumasi in Ghana has test tubes where they measure the amount of pollution and send their data into an excel sheet. Now the effect of air pollution can be seen to everyone who is curious about it through this project.
 
 ## Techniques
 
