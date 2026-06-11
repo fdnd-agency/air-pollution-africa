@@ -1,7 +1,23 @@
 <script>
 	import { onDestroy, onMount } from 'svelte'
 	import 'leaflet/dist/leaflet.css'
-	import { reshapePoints, computeMaxValue, buildScalePresets, getKleuren, getClass, getMonthValue, buildAvailability, legendValues, sortedMonthly, windowAround, buildSparkline, kleuren, monthNames, monthShort, monthKey } from '$lib/airQuality'
+	import {
+		reshapePoints,
+		computeMaxValue,
+		buildScalePresets,
+		getKleuren,
+		getClass,
+		getMonthValue,
+		buildAvailability,
+		legendValues,
+		sortedMonthly,
+		windowAround,
+		buildSparkline,
+		kleuren,
+		monthNames,
+		monthShort,
+		monthKey
+	} from '$lib/airQuality'
 
 	const { samplingPoints = [], measurements = [], initialView, initialZoom = 13 } = $props()
 
@@ -20,7 +36,7 @@
 	let points = []
 	let maxValue = null
 	let scalePresets = buildScalePresets(null)
-	let activeScale = scalePresets.RELATIVE
+	let activeScale = scalePresets.EU
 	let availability = { byYear: {}, years: [], latest: null }
 	let selectedYear = new Date().getFullYear()
 	let selectedMonthIndex = new Date().getMonth()
@@ -298,7 +314,7 @@
 		points = reshapePoints(samplingPoints, measurements)
 		maxValue = computeMaxValue(points)
 		scalePresets = buildScalePresets(maxValue)
-		activeScale = scalePresets.RELATIVE
+		activeScale = scalePresets.EU
 		availability = buildAvailability(points)
 		selectedYear = availability.latest?.year ?? new Date().getFullYear()
 		selectedMonthIndex = availability.latest?.monthIndex ?? new Date().getMonth()
