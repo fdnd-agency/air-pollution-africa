@@ -1,7 +1,7 @@
 # air-pollution Africa
 
 ## Table of contents
-  * [Description](#description)
+  * [Description](#project-description)
   * [Techniques](#techniques)
   * [Installation](#installation)
   * [User Manual](#user-manual)
@@ -50,7 +50,9 @@ With our `[slug]` folder we made it possible to change to the city where there i
  
 ### Map
 The map on the current iteration of the homepage is one of the more complex codes on the website. You can interact with the map by dragging with your mouse or finger on mobile, this way you can navigate through the city of Kumasi in an aerial view. You can zoom in on the map by using the mouse wheel, double clicking on the part you want to be zoomed in on or on mobile use two fingers to press onto the map and divide them to zoom in.
+<br>
 <img width="397" height="344" alt="Screenshot 2026-06-11 142511" src="https://github.com/user-attachments/assets/3e035ab1-cb0a-481d-b406-3077da43841a" />
+</br>
 
 ### Pins
 On the map there are several pins that indicate the air pollution in the city you are currently observing. You can click on the pin and see the results that have been collected of a certain month in a certain year. The pins are differently colored in the way of green to red. Those colors indicate the air pollution.
@@ -82,7 +84,7 @@ In sprint 8 the front-end and software developers worked on recreating the map t
  
 ### Design
  
-This project has remained in the same style as was used in the previous version, but after the style has changed with the CMD restyle this with be applied
+This project has remained in the same style as was used in the previous version, but after the style has changed with the CMD restyle this with be applied. [Issue](https://github.com/orgs/fdnd-agency/projects/112?pane=issue&itemId=NaN&issue=fdnd-agency%7Cair-pollution-africa%7C16) where the CMD design system is.
 
 
 ## Team Members
