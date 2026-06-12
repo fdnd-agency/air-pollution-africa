@@ -1,6 +1,6 @@
 # Project Handover — Air Pollution Africa
 
-> A short introduction to the project for the next team. For technical depth, see [`SERVICES.md`](./SERVICES.md) (the server-side backbone) and the [`conventions/`](./conventions/) folder.
+> A short introduction to the project for the next team. For technical depth, see [`SERVICES.md`](./SERVICES.md) (the server-side backbone) and the [`conventions/`](./conventions/) folder. For the visual design and design system, see the [design handover](./DESIGN-HANDOVER.md) from the CMD team.
 >
 > _Written by the outgoing internship team, 2026-06-10._
 
