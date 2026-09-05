@@ -30,7 +30,7 @@
 
 - **`DirectusService`** is the lowest layer: a thin REST wrapper. Everything else calls it.
 - **`CityService`** is a read-oriented data layer for city-scoped content (points, measurements, tubes).
-- **`AuthService`** orchestrates the passwordless login flow, delegating to `LoginCodeManager` (codes) and `SessionManager` (sessions).
+- **`AuthService`** orchestrates the passwordless login flow, delegating to `LoginCodeManager` (codes) and `SessionManager` (sessions). Resend and Netlify DNS setup is documented in [`HANDOVER.md`](./HANDOVER.md#resend-and-netlify-dns).
 - **`SessionManager`** and **`LoginCodeManager`** each own one Directus collection and its lifecycle rules.
 
 ---

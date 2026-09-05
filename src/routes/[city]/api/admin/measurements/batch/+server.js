@@ -1,9 +1,10 @@
 import { DirectusService } from '$lib/server/services/directusService'
+import { getCityPoint, getCityTube, resolveCity } from '$lib/server/services/cityService'
 
 const MEASUREMENT_MIN = 0
 const MEASUREMENT_MAX = 200
 
-export async function POST({ request, locals }) {
+export async function POST({ request, locals, params }) {
 	if (!locals.user) {
 		return new Response(JSON.stringify({ error: 'Unauthorized' }), {
 			status: 401,
@@ -12,6 +13,8 @@ export async function POST({ request, locals }) {
 	}
 
 	const token = DirectusService.getServerToken()
+	const city = await resolveCity(params.city, { token })
+	if (!city) return new Response(JSON.stringify({ error: `Unknown city "${params.city}".` }), { status: 404, headers: { 'Content-Type': 'application/json' } })
 
 	const body = await request.json().catch(() => ({}))
 	const { year, month, entries } = body
@@ -39,6 +42,7 @@ export async function POST({ request, locals }) {
 	for (const [index, entry] of entries.entries()) {
 		const { pointId } = entry
 		if (!pointId) continue
+		if (!(await getCityPoint(pointId, city.id, { token }))) return new Response(JSON.stringify({ error: 'A sampling point is not in this city.', index }), { status: 404, headers: { 'Content-Type': 'application/json' } })
 
 		const tubeId = entry.tube_id === null || entry.tube_id === undefined ? '' : String(entry.tube_id).trim()
 		if (!tubeId) {
@@ -47,6 +51,7 @@ export async function POST({ request, locals }) {
 				headers: { 'Content-Type': 'application/json' }
 			})
 		}
+		if (!(await getCityTube(tubeId, city.id, { token }))) return new Response(JSON.stringify({ error: 'A tube is not in this city.', index }), { status: 404, headers: { 'Content-Type': 'application/json' } })
 
 		const rawValueString = entry.value === null || entry.value === undefined ? '' : String(entry.value).trim()
 		const hasValue = rawValueString !== ''

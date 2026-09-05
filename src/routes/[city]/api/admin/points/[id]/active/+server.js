@@ -1,4 +1,5 @@
 import { DirectusService } from '$lib/server/services/directusService'
+import { getCityPoint, resolveCity } from '$lib/server/services/cityService'
 
 export async function PATCH({ request, locals, params }) {
 	if (!locals.user) {
@@ -9,6 +10,9 @@ export async function PATCH({ request, locals, params }) {
 	}
 
 	const token = DirectusService.getServerToken()
+	const city = await resolveCity(params.city, { token })
+	if (!city) return new Response(JSON.stringify({ error: `Unknown city "${params.city}".` }), { status: 404, headers: { 'Content-Type': 'application/json' } })
+	if (!(await getCityPoint(params.id, city.id, { token }))) return new Response(JSON.stringify({ error: 'Point not found in this city.' }), { status: 404, headers: { 'Content-Type': 'application/json' } })
 
 	const { id } = params
 	if (!id) {

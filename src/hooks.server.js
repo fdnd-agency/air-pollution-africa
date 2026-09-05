@@ -1,5 +1,7 @@
 import { AuthService } from '$lib/server/services/authService.js'
 import { createRateLimiter } from '$lib/server/helpers/rateLimiter.js'
+import { resolveCity } from '$lib/server/services/cityService.js'
+import { accessFailure } from '$lib/server/services/authorizationService.js'
 
 const WINDOW_MS = 15 * 60 * 1000
 // City-aware: the login form now lives at /<city>/admin/login, so match on suffix.
@@ -14,10 +16,35 @@ export async function handle({ event, resolve }) {
 		event.locals.user = session.user
 	}
 
+	const cityAccess = await checkAdminCityAccess(event)
+	if (cityAccess) return cityAccess
+
 	const limited = checkLoginRateLimit(event)
 	if (limited) return limited
 
 	return resolve(event)
+}
+
+async function checkAdminCityAccess(event) {
+	const segments = event.url.pathname.split('/').filter(Boolean)
+	if (segments.length < 2 || segments[1] !== 'admin' || segments[2] === 'login') return null
+
+	const city = await resolveCity(segments[0])
+	const failure = accessFailure(event.locals.user, city)
+	if (!failure) return null
+
+	if (event.url.pathname.includes('/api/')) {
+		return new Response(JSON.stringify({ error: failure.error }), {
+			status: failure.status,
+			headers: { 'Content-Type': 'application/json' }
+		})
+	}
+
+	if (failure.status === 401) {
+		return new Response(null, { status: 303, headers: { Location: `/${segments[0]}/admin/login` } })
+	}
+
+	return new Response('Forbidden', { status: failure.status })
 }
 
 /**

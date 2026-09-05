@@ -1,6 +1,7 @@
 import { redirect } from '@sveltejs/kit'
 import { DirectusService } from '$lib/server/services/directusService'
 import { getCityData, getCityTubes } from '$lib/server/services/cityService'
+import { hasAdminAccess } from '$lib/server/services/authorizationService'
 
 /** Relation fields come back as ids by default; guard in case of expansion. */
 function relId(value) {
@@ -15,12 +16,13 @@ export async function load({ locals, params, parent }) {
 
 	const { city } = await parent()
 	const token = DirectusService.getServerToken()
-	const isAdmin = locals.user.role === 'admin'
+	const isAdmin = hasAdminAccess(locals.user)
+	const usersQuery = locals.user.role === 'superadmin' ? '' : `filter[city][_eq]=${encodeURIComponent(city.id)}`
 	const [{ points: rawPoints, measurements }, tubes, users] = await Promise.all([
 		getCityData(city.id, { token, includeMeasurements: true, pointsQuery: 'sort=point_number' }),
 		getCityTubes(city.id, { token, query: 'sort=code' }),
 		// User management is admin-only — don't even fetch the list for researchers.
-		isAdmin ? DirectusService.getUsers('', { token }) : Promise.resolve([])
+		isAdmin ? DirectusService.getUsers(usersQuery, { token }) : Promise.resolve([])
 	])
 
 	const tubeCodeById = new Map(tubes.map((t) => [t.id, t.code]))

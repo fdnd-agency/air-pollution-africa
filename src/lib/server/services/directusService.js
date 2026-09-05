@@ -108,19 +108,22 @@ export class DirectusService {
 		return this.getContent('apa_users', query, options)
 	}
 
-	static async createUser({ email, role = 'researcher', active = true }, options = {}) {
+	static async createUser({ email, role = 'researcher', active = true, city }, options = {}) {
 		const trimmedEmail = String(email || '').trim()
 		if (!trimmedEmail) throw new Error('Email is required.')
 
 		// Passwordless: creating a user just authorizes an email for login-code sign-in.
+		const payload = {
+			email: trimmedEmail,
+			email_lower: trimmedEmail.toLowerCase(),
+			role,
+			active
+		}
+		if (city !== undefined && city !== null && city !== '') payload.city = city
+
 		return this.postContent(
 			'apa_users',
-			{
-				email: trimmedEmail,
-				email_lower: trimmedEmail.toLowerCase(),
-				role,
-				active
-			},
+			payload,
 			options
 		)
 	}

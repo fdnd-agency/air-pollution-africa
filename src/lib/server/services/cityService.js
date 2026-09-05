@@ -66,3 +66,34 @@ export async function getCityTubes(cityId, { token, query = '' } = {}) {
 	if (!q.has('limit')) q.set('limit', '-1')
 	return DirectusService.getContent('apa_tubes', q.toString(), { token })
 }
+
+export async function getCityPoint(pointId, cityId, { token } = {}) {
+	const items = await DirectusService.getContent(
+		'apa_sampling_points',
+		`filter[id][_eq]=${encodeURIComponent(pointId)}&filter[city][_eq]=${encodeURIComponent(cityId)}&limit=1`,
+		{ token }
+	)
+	return items[0] || null
+}
+
+export async function getCityTube(tubeId, cityId, { token } = {}) {
+	const items = await DirectusService.getContent(
+		'apa_tubes',
+		`filter[id][_eq]=${encodeURIComponent(tubeId)}&filter[city][_eq]=${encodeURIComponent(cityId)}&limit=1`,
+		{ token }
+	)
+	return items[0] || null
+}
+
+export async function getCityMeasurement(measurementId, cityId, { token } = {}) {
+	const items = await DirectusService.getContent(
+		'apa_measurements',
+		`filter[id][_eq]=${encodeURIComponent(measurementId)}&fields=id,sampling_point,tube&limit=1`,
+		{ token }
+	)
+	const measurement = items[0]
+	if (!measurement) return null
+
+	const point = await getCityPoint(measurement.sampling_point, cityId, { token })
+	return point ? measurement : null
+}

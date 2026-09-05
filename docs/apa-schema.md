@@ -82,6 +82,7 @@ erDiagram
         boolean active
         dateTime last_login_at
         string role
+        uuid city FK
     }
     apa_users ||--o{ apa_login_codes : user
     apa_cities ||--o{ apa_sampling_points : city
@@ -89,6 +90,7 @@ erDiagram
     apa_sampling_points ||--o{ apa_measurements : sampling_point
     apa_cities ||--o{ apa_tubes : city
     apa_users ||--o{ apa_sessions : user
+    apa_cities ||--o{ apa_users : city
 ```
 
 ## Collections
@@ -191,3 +193,6 @@ erDiagram
 | active        | boolean   | no   |         |     |            |
 | last_login_at | dateTime  | yes  |         |     |            |
 | role          | string    | no   |         |     |            |
+| city          | uuid      | yes  |         | FK  | apa_cities.id |
+
+`role` accepts `researcher`, `admin`, or `superadmin`. `researcher` and `admin` users must have a city. `superadmin` is global and should be assigned only to trusted maintainers.

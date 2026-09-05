@@ -1,5 +1,6 @@
 import { json } from '@sveltejs/kit'
 import { DirectusService } from '$lib/server/services/directusService'
+import { getCityPoint, getCityTube, resolveCity } from '$lib/server/services/cityService'
 
 const MEASUREMENT_MIN = 0
 const MEASUREMENT_MAX = 200
@@ -14,16 +15,20 @@ function parseValue(raw, noMeasurement) {
 	return { ok: true, value: n }
 }
 
-export async function POST({ request, locals }) {
+export async function POST({ request, locals, params }) {
 	if (!locals.user) return json({ error: 'Unauthorized' }, { status: 401 })
 
 	const token = DirectusService.getServerToken()
+	const city = await resolveCity(params.city, { token })
+	if (!city) return json({ error: `Unknown city "${params.city}".` }, { status: 404 })
 	const body = await request.json().catch(() => ({}))
 	const { samplingPoint, date, tube, noMeasurement } = body
 
 	if (!samplingPoint || !date || !tube) {
 		return json({ error: 'samplingPoint, date and tube are required.' }, { status: 400 })
 	}
+	if (!(await getCityPoint(samplingPoint, city.id, { token }))) return json({ error: 'Sampling point not found in this city.' }, { status: 404 })
+	if (!(await getCityTube(tube, city.id, { token }))) return json({ error: 'Tube not found in this city.' }, { status: 404 })
 
 	const when = new Date(date)
 	if (Number.isNaN(when.getTime())) return json({ error: 'date must be a valid date.' }, { status: 400 })

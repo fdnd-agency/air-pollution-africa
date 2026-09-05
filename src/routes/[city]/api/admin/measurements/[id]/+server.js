@@ -1,5 +1,6 @@
 import { json } from '@sveltejs/kit'
 import { DirectusService } from '$lib/server/services/directusService'
+import { getCityMeasurement, getCityTube, resolveCity } from '$lib/server/services/cityService'
 
 const MEASUREMENT_MIN = 0
 const MEASUREMENT_MAX = 200
@@ -20,10 +21,15 @@ export async function PATCH({ request, locals, params }) {
 	if (!id) return json({ error: 'Invalid measurement id.' }, { status: 400 })
 
 	const token = DirectusService.getServerToken()
+	const city = await resolveCity(params.city, { token })
+	if (!city) return json({ error: `Unknown city "${params.city}".` }, { status: 404 })
+	const measurement = await getCityMeasurement(id, city.id, { token })
+	if (!measurement) return json({ error: 'Measurement not found in this city.' }, { status: 404 })
 	const body = await request.json().catch(() => ({}))
 	const { date, tube, noMeasurement } = body
 
 	if (!date || !tube) return json({ error: 'date and tube are required.' }, { status: 400 })
+	if (!(await getCityTube(tube, city.id, { token }))) return json({ error: 'Tube not found in this city.' }, { status: 404 })
 
 	const when = new Date(date)
 	if (Number.isNaN(when.getTime())) return json({ error: 'date must be a valid date.' }, { status: 400 })
@@ -44,6 +50,9 @@ export async function DELETE({ locals, params }) {
 	if (!id) return json({ error: 'Invalid measurement id.' }, { status: 400 })
 
 	const token = DirectusService.getServerToken()
+	const city = await resolveCity(params.city, { token })
+	if (!city) return json({ error: `Unknown city "${params.city}".` }, { status: 404 })
+	if (!(await getCityMeasurement(id, city.id, { token }))) return json({ error: 'Measurement not found in this city.' }, { status: 404 })
 	await DirectusService.deleteContent('apa_measurements', id, { token })
 	return json({ success: true })
 }

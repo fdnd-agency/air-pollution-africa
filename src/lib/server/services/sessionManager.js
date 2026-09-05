@@ -6,7 +6,7 @@ const SESSION_TTL_MS = 8 * 60 * 60 * 1000
 const COLLECTION = 'apa_sessions'
 
 // Session row + related apa_user fetched in a single request via field expansion.
-const USER_FIELDS = ['id', 'email', 'email_lower', 'role', 'active', 'last_login_at']
+const USER_FIELDS = ['id', 'email', 'email_lower', 'role', 'active', 'last_login_at', 'city']
 const FIELDS = ['id', 'token', 'expires_at', 'last_seen_at', ...USER_FIELDS.map((f) => `user.${f}`)].join(',')
 
 export class SessionManager {
@@ -112,6 +112,7 @@ function normalizeUser(user) {
 		emailLower: user.email_lower,
 		role: user.role,
 		active: user.active,
-		lastLoginAt: user.last_login_at
+		lastLoginAt: user.last_login_at,
+		city: user.city
 	}
 }

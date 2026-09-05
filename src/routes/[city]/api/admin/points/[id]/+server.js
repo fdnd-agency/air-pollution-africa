@@ -1,5 +1,6 @@
 import { json } from '@sveltejs/kit'
 import { DirectusService } from '$lib/server/services/directusService'
+import { getCityPoint, resolveCity } from '$lib/server/services/cityService'
 
 export async function PATCH({ request, locals, params }) {
 	if (!locals.user) return json({ error: 'Unauthorized' }, { status: 401 })
@@ -8,6 +9,9 @@ export async function PATCH({ request, locals, params }) {
 	if (!id) return json({ error: 'Invalid point id.' }, { status: 400 })
 
 	const token = DirectusService.getServerToken()
+	const city = await resolveCity(params.city, { token })
+	if (!city) return json({ error: `Unknown city "${params.city}".` }, { status: 404 })
+	if (!(await getCityPoint(id, city.id, { token }))) return json({ error: 'Point not found in this city.' }, { status: 404 })
 	const body = await request.json().catch(() => ({}))
 
 	const patch = {}

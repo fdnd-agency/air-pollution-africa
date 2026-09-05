@@ -1,8 +1,10 @@
 import { DirectusService } from '$lib/server/services/directusService'
+import { resolveCity } from '$lib/server/services/cityService'
+import { hasAdminAccess, isSuperadmin } from '$lib/server/services/authorizationService'
 
 const ALLOWED_ROLES = ['researcher', 'admin']
 
-export async function GET({ locals }) {
+export async function GET({ locals, params }) {
 	if (!locals.user) {
 		return new Response(JSON.stringify({ error: 'Unauthorized' }), {
 			status: 401,
@@ -10,7 +12,7 @@ export async function GET({ locals }) {
 		})
 	}
 
-	if (locals.user.role !== 'admin') {
+	if (!hasAdminAccess(locals.user)) {
 		return new Response(JSON.stringify({ error: 'Forbidden: admin role required.' }), {
 			status: 403,
 			headers: { 'Content-Type': 'application/json' }
@@ -18,13 +20,17 @@ export async function GET({ locals }) {
 	}
 
 	const token = DirectusService.getServerToken()
+	const city = await resolveCity(params.city, { token })
+	if (!city) return new Response(JSON.stringify({ error: `Unknown city "${params.city}".` }), { status: 404, headers: { 'Content-Type': 'application/json' } })
 
-	const users = await DirectusService.getUsers('', { token })
+	const query = isSuperadmin(locals.user) ? '' : `filter[city][_eq]=${encodeURIComponent(city.id)}`
+	const users = await DirectusService.getUsers(query, { token })
 	const cleaned = users.map((user) => ({
 		id: user.id,
 		email: user.email,
 		role: user.role,
-		active: user.active
+		active: user.active,
+		city: user.city
 	}))
 
 	return new Response(JSON.stringify(cleaned), {
@@ -32,7 +38,7 @@ export async function GET({ locals }) {
 	})
 }
 
-export async function POST({ request, locals }) {
+export async function POST({ request, locals, params }) {
 	if (!locals.user) {
 		return new Response(JSON.stringify({ error: 'Unauthorized' }), {
 			status: 401,
@@ -40,7 +46,7 @@ export async function POST({ request, locals }) {
 		})
 	}
 
-	if (locals.user.role !== 'admin') {
+	if (!hasAdminAccess(locals.user)) {
 		return new Response(JSON.stringify({ error: 'Forbidden: admin role required.' }), {
 			status: 403,
 			headers: { 'Content-Type': 'application/json' }
@@ -48,6 +54,8 @@ export async function POST({ request, locals }) {
 	}
 
 	const token = DirectusService.getServerToken()
+	const city = await resolveCity(params.city, { token })
+	if (!city) return new Response(JSON.stringify({ error: `Unknown city "${params.city}".` }), { status: 404, headers: { 'Content-Type': 'application/json' } })
 
 	const body = await request.json().catch(() => ({}))
 	const email = String(body.email || '').trim()
@@ -67,7 +75,7 @@ export async function POST({ request, locals }) {
 		})
 	}
 
-	const created = await DirectusService.createUser({ email, role }, { token })
+	const created = await DirectusService.createUser({ email, role, city: city.id }, { token })
 
 	return new Response(JSON.stringify(created?.data ?? created), {
 		status: 201,
